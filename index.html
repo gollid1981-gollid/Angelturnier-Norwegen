@@ -11,24 +11,33 @@
 
 ```
 :root {
-  --water: #0a1628;
-  --deep: #061020;
-  --surface: #0f2040;
-  --card: #112238;
-  --border: #1e3a5f;
-  --gold: #d4a234;
-  --gold-light: #f0c060;
+  --water: #7fa6c7;
+  --deep: #040b16;
+  --surface: #132844;
+  --surface-strong: #183459;
+  --card: #10233b;
+  --card-soft: #152d4b;
+  --border: #2a4c74;
+  --gold: #c49a57;
+  --gold-light: #d8ae69;
   --silver: #8ba3b8;
   --bronze: #b87040;
-  --accent: #2e8bc0;
-  --green: #2eb87a;
-  --text: #e8f4f8;
-  --muted: #6a8fa8;
+  --accent: #3aa0f3;
+  --accent-strong: #1f7fe5;
+  --green: #4f9f83;
+  --text: #f5fbff;
+  --text-strong: #ffffff;
+  --muted: #b6cbe0;
+  --danger: #ff8f8f;
+  --danger-bg: rgba(220, 74, 74, 0.18);
+  --icon-bg: rgba(78,180,241,0.14);
+  --icon-border: rgba(121,204,255,0.4);
+  --shadow-soft: 0 10px 30px rgba(3, 11, 24, 0.35);
 }
 
 body {
   font-family: 'Source Sans 3', sans-serif;
-  background: var(--deep);
+  background: linear-gradient(180deg, #f9f6f1 0%, #f2ede5 100%);
   color: var(--text);
   min-height: 100vh;
   overflow-x: hidden;
@@ -40,9 +49,9 @@ body::before {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(ellipse 120% 60% at 20% 80%, rgba(14,50,90,0.6) 0%, transparent 70%),
-    radial-gradient(ellipse 80% 40% at 80% 20%, rgba(10,30,60,0.8) 0%, transparent 60%),
-    linear-gradient(180deg, #061020 0%, #0a1628 40%, #0d1e38 100%);
+    radial-gradient(ellipse 120% 60% at 20% 80%, rgba(182,138,61,0.10) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 40% at 80% 20%, rgba(111,143,168,0.10) 0%, transparent 60%),
+    linear-gradient(180deg, #fbf8f3 0%, #f2ede5 48%, #ece2d6 100%);
   z-index: 0;
 }
 
@@ -54,7 +63,7 @@ body::after {
   background: repeating-linear-gradient(
     90deg,
     transparent 0px, transparent 8px,
-    rgba(46,139,192,0.04) 8px, rgba(46,139,192,0.04) 16px
+    rgba(182,138,61,0.07) 8px, rgba(182,138,61,0.07) 16px
   );
   animation: ripple 6s linear infinite;
   z-index: 0;
@@ -114,42 +123,82 @@ h1 {
 .subtitle {
   color: var(--muted);
   font-size: 14px;
-  letter-spacing: 4px;
+  letter-spacing: 3px;
   text-transform: uppercase;
+  font-weight: 600;
 }
 
 /* NAV TABS */
 .tabs {
   display: flex;
   gap: 4px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
+  background: rgba(255, 253, 249, 0.94) !important;
+  border: 1px solid #e4d8c8 !important;
+  border-radius: 16px;
   padding: 6px;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
+  box-shadow: 0 10px 24px rgba(74,54,34,0.06);
 }
 
 .tab-btn {
   flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   padding: 10px 16px;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   background: transparent;
-  color: var(--muted);
+  color: #6f6254 !important;
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.25s;
-  letter-spacing: 0.5px;
+  transition: all 0.25s ease;
+  letter-spacing: 0.2px;
+  min-height: 46px;
 }
 
-.tab-btn:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+.tab-btn:hover {
+  color: #2f241a !important;
+  background: rgba(34, 123, 255, 0.10);
+}
+
+.tab-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #f2ede6;
+  color: #7f7468;
+  box-shadow: inset 0 0 0 1px rgba(111,98,84,0.08);
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.tab-label {
+  line-height: 1;
+  white-space: nowrap;
+}
 
 .tab-btn.active {
-  background: var(--accent);
-  color: #fff;
-  box-shadow: 0 4px 16px rgba(46,139,192,0.4);
+  background: linear-gradient(135deg, rgba(34,123,255,0.18) 0%, rgba(9,92,214,0.24) 100%);
+  color: #0a3f8f !important;
+  box-shadow: 0 10px 24px rgba(34,123,255,0.24);
+}
+
+.tab-btn.active .tab-icon {
+  background: linear-gradient(135deg, #2f80ff 0%, #0f5fe0 100%);
+  color: #ffffff;
+  box-shadow: 0 10px 22px rgba(34,123,255,0.38);
+}
+
+.tab-btn:focus-visible {
+  outline: 3px solid rgba(34,123,255,0.30);
+  outline-offset: 2px;
 }
 
 /* PANELS */
@@ -163,11 +212,12 @@ h1 {
 
 /* CARDS */
 .card {
-  background: var(--card);
+  background: linear-gradient(180deg, rgba(21,45,75,0.95) 0%, rgba(16,35,59,0.98) 100%);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 18px;
   padding: 28px;
   margin-bottom: 20px;
+  box-shadow: var(--shadow-soft);
 }
 
 .card-title {
@@ -178,6 +228,123 @@ h1 {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+
+.logo,
+.card-title,
+.empty-icon,
+.species-badge,
+.rank-pos {
+  text-shadow: 0 0 16px rgba(246, 207, 118, 0.2);
+}
+
+.card-title,
+.species-badge {
+  color: var(--text-strong);
+}
+
+.card-title,
+.species-badge,
+.tab-btn,
+.btn,
+.empty-icon {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.card-title > :first-child,
+.species-badge > :first-child,
+.ranking-header > .species-badge,
+.empty-icon,
+.logo {
+  position: relative;
+}
+
+.card-title::before,
+.species-badge::before {
+  content: '';
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  background: var(--icon-bg);
+  border: 1px solid var(--icon-border);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 8px 18px rgba(4,17,31,0.28);
+  position: absolute;
+  transform: translateY(-1px);
+}
+
+.card-title,
+.species-badge {
+  position: relative;
+  padding-left: 44px;
+  min-height: 34px;
+}
+
+.card-title::after,
+.species-badge::after {
+  content: '';
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--gold-light) 0%, var(--gold) 70%, rgba(212,162,52,0.2) 100%);
+  transform: translateY(-50%);
+  box-shadow: 0 0 14px rgba(246, 207, 118, 0.55);
+}
+
+.participant-chip,
+.species-tag,
+.catch-item,
+.stat-chip,
+.ranking-table tbody tr {
+  background: rgba(19,40,68,0.9);
+}
+
+.participant-chip,
+.species-tag,
+.catch-item {
+  border-radius: 14px;
+}
+
+.participant-chip .name,
+.catch-item .ci-main,
+.ranking-table td,
+.species-tag,
+.length-sub,
+.catch-item .ci-sub {
+  color: var(--text);
+}
+
+.catch-item .ci-sub,
+.length-sub,
+.ranking-table th,
+label,
+.subtitle,
+.stat-chip .lbl {
+  color: var(--muted);
+}
+
+.tab-btn,
+.btn,
+input,
+select {
+  min-height: 46px;
+}
+
+.tab-btn {
+  font-size: 15px;
+}
+
+.btn {
+  font-size: 15px;
+}
+
+.participant-chip .avatar,
+.catch-item .ci-avatar,
+.mini-avatar {
+  box-shadow: 0 6px 14px rgba(4,17,31,0.22);
 }
 
 /* FORM ELEMENTS */
@@ -205,13 +372,13 @@ label {
 }
 
 input, select {
-  background: #1a3a5c;
-  border: 1px solid #2e5f8a;
-  border-radius: 10px;
-  color: #ffffff;
+  background: rgba(8, 25, 43, 0.9);
+  border: 1px solid #4777a5;
+  border-radius: 12px;
+  color: var(--text-strong);
   font-family: 'Source Sans 3', sans-serif;
-  font-size: 15px;
-  padding: 10px 14px;
+  font-size: 16px;
+  padding: 13px 14px;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
@@ -221,9 +388,9 @@ input:focus, select:focus {
   box-shadow: 0 0 0 3px rgba(46,139,192,0.2);
 }
 
-input::placeholder { color: var(--muted); }
+input::placeholder { color: #9eb7cc; }
 
-select option { background: var(--surface); }
+select option { background: #fffdfa; color: #2f241a; }
 
 .btn {
   padding: 11px 22px;
@@ -239,32 +406,36 @@ select option { background: var(--surface); }
 }
 
 .btn-primary {
-  background: var(--accent);
-  color: #fff;
-  box-shadow: 0 4px 14px rgba(46,139,192,0.3);
+  background: linear-gradient(135deg, #c8a15f 0%, #c49a57 55%, #b98a45 100%);
+  color: #fffdf9;
+  box-shadow: 0 10px 22px rgba(196,154,87,0.26);
+  border-radius: 18px;
 }
 
 .btn-primary:hover {
-  background: #3a9fd4;
+  background: linear-gradient(135deg, #d0aa6a 0%, #c89d58 55%, #bd8f4b 100%);
   transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(46,139,192,0.5);
+  box-shadow: 0 12px 26px rgba(196,154,87,0.32);
 }
 
 .btn-gold {
-  background: linear-gradient(135deg, var(--gold), var(--gold-light));
-  color: #1a0e00;
+  background: linear-gradient(135deg, #c8a15f 0%, #c49a57 55%, #b98a45 100%);
+  color: #fffdf9;
+  box-shadow: 0 10px 24px rgba(196,154,87,0.28);
+  border-radius: 18px;
 }
 
 .btn-gold:hover {
+  background: linear-gradient(135deg, #d0aa6a 0%, #c89d58 55%, #bd8f4b 100%);
   transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(212,162,52,0.4);
+  box-shadow: 0 12px 28px rgba(196,154,87,0.34);
 }
 
 .btn-danger {
-  background: rgba(200,60,60,0.15);
-  color: #e07070;
-  border: 1px solid rgba(200,60,60,0.3);
-  padding: 6px 12px;
+  background: var(--danger-bg);
+  color: var(--danger);
+  border: 1px solid rgba(255,143,143,0.32);
+  padding: 8px 12px;
   font-size: 12px;
 }
 
@@ -424,7 +595,8 @@ select option { background: var(--surface); }
   border-radius: 8px;
   padding: 6px 14px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--text);
 }
 
 .ranking-table {
@@ -468,10 +640,10 @@ select option { background: var(--surface); }
   font-family: 'Playfair Display', serif;
 }
 
-.rank-1 { background: linear-gradient(135deg, #c8960a, #f0c060); color: #1a0e00; box-shadow: 0 0 16px rgba(212,162,52,0.5); }
-.rank-2 { background: linear-gradient(135deg, #6a8090, #a8c0d0); color: #0a1628; }
-.rank-3 { background: linear-gradient(135deg, #8a4a20, #c07040); color: #fff; }
-.rank-other { background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
+.rank-1 { background: linear-gradient(135deg, #c7a15a, #b68a3d); color: #fffdf9; box-shadow: 0 0 16px rgba(182,138,61,0.28); text-shadow: 0 1px 2px rgba(0,0,0,0.14); }
+.rank-2 { background: linear-gradient(135deg, #93a6b5, #7f95a7); color: #fffdf9; text-shadow: 0 1px 2px rgba(0,0,0,0.12); }
+.rank-3 { background: linear-gradient(135deg, #b98766, #9e6f52); color: #fffdf9; text-shadow: 0 1px 2px rgba(0,0,0,0.12); }
+.rank-other { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
 
 .angler-row {
   display: flex;
@@ -544,13 +716,14 @@ select option { background: var(--surface); }
 }
 
 .stat-chip {
-  background: var(--surface);
+  background: linear-gradient(180deg, rgba(24,52,89,0.95) 0%, rgba(19,40,68,0.98) 100%);
   border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 10px 16px;
+  border-radius: 14px;
+  padding: 12px 16px;
   text-align: center;
   flex: 1;
   min-width: 100px;
+  box-shadow: var(--shadow-soft);
 }
 
 .stat-chip .val {
@@ -569,14 +742,418 @@ select option { background: var(--surface); }
   margin-top: 4px;
 }
 
+@media (max-width: 680px) {
+  .wrapper {
+    padding: 18px 14px 40px;
+  }
+
+  header {
+    margin-bottom: 28px;
+  }
+
+  .logo {
+    font-size: 44px;
+    margin-bottom: 10px;
+  }
+
+  .subtitle {
+    letter-spacing: 2px;
+    font-size: 12px;
+  }
+
+  .tabs {
+    position: sticky;
+    top: 10px;
+    z-index: 10;
+    backdrop-filter: blur(10px);
+  }
+
+  .tab-btn {
+    padding: 12px 10px;
+    font-size: 13px;
+    gap: 8px;
+  }
+
+  .tab-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+  }
+
+  .card {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .card-title,
+  .species-badge {
+    font-size: 18px;
+    padding-left: 40px;
+  }
+
+  .card-title::before,
+  .species-badge::before {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+  }
+
+  .participants-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .participant-chip,
+  .catch-item {
+    padding: 12px;
+  }
+
+  .ranking-table th,
+  .ranking-table td {
+    padding: 10px 8px;
+  }
+
+  .length-display {
+    font-size: 18px;
+  }
+}
+
 @media (max-width: 520px) {
   .form-row { flex-direction: column; }
-  .tabs { gap: 2px; }
-  .tab-btn { padding: 9px 8px; font-size: 12px; }
+  .tabs { gap: 4px; }
+  .tab-btn { padding: 11px 8px; font-size: 12px; }
+  .btn,
+  input,
+  select { width: 100%; }
+  .stat-chips { gap: 8px; }
+  .stat-chip { min-width: calc(50% - 4px); }
 }
 ```
 
-  </style>
+  
+.card-title, .catch-item .ci-main, .participant-chip .name, .ranking-table td, .empty-state p {
+  color: var(--text);
+}
+
+.subtitle, .catch-item .ci-sub, .length-sub, .ranking-table th, label, .stat-chip .lbl {
+  color: var(--muted);
+}
+
+.tab-btn {
+  color: #6f6254;
+}
+
+.tabs {
+  box-shadow: 0 10px 24px rgba(74,54,34,0.06);
+}
+
+.participant-chip,
+.species-tag,
+.catch-item,
+.stat-chip {
+  background: #fcf8f2;
+}
+
+.empty-icon {
+  opacity: 0.65;
+}
+
+
+.logo {
+  background: radial-gradient(circle at 30% 30%, #d9bc86 0%, #b68a3d 62%, #9e7740 100%);
+  width: 86px;
+  height: 86px;
+  margin: 0 auto 14px;
+  border-radius: 26px;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 16px 34px rgba(182,138,61,0.22);
+  filter: none;
+}
+
+h1 {
+  background: linear-gradient(135deg, #7d6340 0%, #b68a3d 55%, #7d6340 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.card-title,
+.species-badge,
+.length-display,
+.stat-chip .val {
+  letter-spacing: 0.01em;
+}
+
+.tabs {
+  border-radius: 18px;
+  background: rgba(255,253,249,0.88);
+  backdrop-filter: blur(10px);
+}
+
+.participant-chip,
+.species-tag,
+.catch-item,
+.stat-chip,
+.ranking-table tbody tr:hover td {
+  background: #fcf8f2;
+}
+
+.ranking-table tbody tr:hover td {
+  transition: background 0.2s ease;
+}
+
+input::placeholder {
+  color: #9b8b79;
+}
+
+input:focus, select:focus {
+  border-color: #b68a3d;
+  box-shadow: 0 0 0 4px rgba(182,138,61,0.12);
+}
+
+.card-title .icon-badge,
+.section-icon {
+  color: #fffdf9;
+  background: linear-gradient(135deg, #c39a55 0%, #b68a3d 100%);
+}
+
+.toast {
+  background: linear-gradient(135deg, #5ea287 0%, #4f9f83 100%);
+  color: #fffdf9;
+}
+
+body, .wrapper, .card, .tabs, .participant-chip, .species-tag, .catch-item, .stat-chip, .ranking-table td, .ranking-table th, label, p, span, div {
+  text-rendering: optimizeLegibility;
+}
+
+
+/* Contrast fix: never dark text on dark blue surfaces */
+body {
+  background: linear-gradient(180deg, #f8f5ef 0%, #efe8de 100%) !important;
+  color: #2f241a !important;
+}
+
+body::before {
+  background:
+    radial-gradient(ellipse 120% 60% at 20% 80%, rgba(182,138,61,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 40% at 80% 20%, rgba(111,143,168,0.06) 0%, transparent 60%),
+    linear-gradient(180deg, #faf7f2 0%, #f2ece3 48%, #ebe1d4 100%) !important;
+}
+
+body::after {
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px, transparent 8px,
+    rgba(182,138,61,0.05) 8px, rgba(182,138,61,0.05) 16px
+  ) !important;
+}
+
+.wrapper {
+  max-width: 1080px;
+}
+
+.card,
+#tab-setup .card,
+#tab-catch .card,
+#tab-ranking .card {
+  background: #fffdf9 !important;
+  border: 1px solid #e4d8c8 !important;
+  box-shadow: 0 14px 36px rgba(74,54,34,0.08) !important;
+}
+
+#participants-list,
+#species-list,
+#catch-log,
+#ranking-content,
+.empty-state {
+  background: transparent !important;
+  color: #2f241a !important;
+}
+
+.card-title,
+.card-title *,
+.participant-chip .name,
+.species-tag,
+.catch-item .ci-main,
+.catch-item .ci-sub,
+.ranking-table td,
+.ranking-table th,
+.empty-state p,
+label,
+.stat-chip .lbl,
+.species-badge,
+.ranking-header span {
+  color: #2f241a !important;
+}
+
+label,
+.catch-item .ci-sub,
+.stat-chip .lbl,
+.ranking-table th,
+.ranking-header span,
+.subtitle {
+  color: #7a6b5b !important;
+}
+
+.participant-chip,
+.species-tag,
+.catch-item,
+.stat-chip,
+.species-badge {
+  background: #fcf8f2 !important;
+  border-color: #eadfce !important;
+}
+
+input,
+select {
+  background: #fffdfa !important;
+  color: #2f241a !important;
+  border: 1px solid #d8c9b7 !important;
+}
+
+input::placeholder,
+select,
+option {
+  color: #8d7c69 !important;
+}
+
+.tabs {
+  background: rgba(255, 253, 249, 0.94) !important;
+  border: 1px solid #e4d8c8 !important;
+}
+
+.tab-btn {
+  color: #6f6254 !important;
+}
+
+.tab-btn.active {
+  color: #fffdf9 !important;
+}
+
+.btn-primary,
+.btn-gold,
+.toast,
+.rank-1,
+.rank-2,
+.rank-3 {
+  color: #fffdf9 !important;
+}
+
+.rank-other {
+  color: #2f241a !important;
+  background: #f6efe6 !important;
+}
+
+.empty-icon {
+  opacity: 0.85 !important;
+  filter: drop-shadow(0 6px 18px rgba(111,143,168,0.12));
+}
+
+
+.btn-gold,
+.btn-primary {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.btn-gold .btn-icon,
+.btn-primary .btn-icon {
+  color: #2f80ff;
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, rgba(58,160,243,0.18) 0%, rgba(31,127,229,0.24) 100%);
+  color: #0b4c9c !important;
+  box-shadow: 0 10px 24px rgba(58,160,243,0.22);
+}
+
+.tab-btn.active .tab-icon {
+  background: linear-gradient(135deg, #3aa0f3 0%, #1f7fe5 100%);
+  color: #ffffff;
+  box-shadow: 0 10px 22px rgba(58,160,243,0.34);
+}
+
+.card-title::after,
+.species-badge::after {
+  background: radial-gradient(circle, #d8ae69 0%, #c49a57 72%, rgba(196,154,87,0.2) 100%);
+  box-shadow: 0 0 14px rgba(216,174,105,0.42);
+}
+
+
+/* Rangliste: bessere Lesbarkeit ohne schwarze Schrift auf dunklem Blau */
+.ranking-section .card,
+#ranking-content .card {
+  background: #fffdf9 !important;
+  border: 1px solid #e4d8c8 !important;
+  box-shadow: 0 14px 36px rgba(74,54,34,0.08) !important;
+}
+
+.ranking-header .species-badge {
+  background: linear-gradient(135deg, #f4ead9 0%, #eadcc6 100%) !important;
+  color: #2f241a !important;
+  border: 1px solid #dccab0 !important;
+}
+
+.ranking-header span,
+.ranking-table th,
+.ranking-table td,
+.ranking-table .length-sub,
+.ranking-table .angler-row span,
+#ranking-content .empty-state p {
+  color: #2f241a !important;
+}
+
+.ranking-table th,
+.ranking-header span,
+.ranking-table .length-sub {
+  color: #7a6b5b !important;
+}
+
+.ranking-table thead tr {
+  background: #f7efe4 !important;
+  border-bottom: 1px solid #e4d8c8 !important;
+}
+
+.ranking-table tbody tr {
+  background: #fffdf9 !important;
+}
+
+.ranking-table tbody tr:nth-child(even) {
+  background: #fcf7f0 !important;
+}
+
+.ranking-table td {
+  border-bottom: 1px solid rgba(228, 216, 200, 0.8) !important;
+}
+
+.ranking-table .length-display {
+  color: #1f7fe5 !important;
+}
+
+.ranking-table tbody tr:first-child .length-display {
+  color: #b98a45 !important;
+}
+
+.rank-other {
+  background: #f1e7d8 !important;
+  color: #2f241a !important;
+  border: 1px solid #dccab0 !important;
+}
+
+#ranking-content .empty-state {
+  background: #fffdf9 !important;
+  border: 1px solid #e4d8c8 !important;
+  border-radius: 18px !important;
+}
+
+#ranking-content .empty-icon {
+  color: #3aa0f3 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+  filter: drop-shadow(0 8px 18px rgba(58,160,243,0.18)) !important;
+}
+
+</style>
 </head>
 <body>
 <div class="wrapper">
@@ -588,9 +1165,18 @@ select option { background: var(--surface); }
   </header>
 
   <nav class="tabs">
-    <button class="tab-btn active" onclick="showTab('setup')">⚙️ Setup</button>
-    <button class="tab-btn" onclick="showTab('catch')">🐟 Fang eintragen</button>
-    <button class="tab-btn" onclick="showTab('ranking')">🏆 Rangliste</button>
+    <button class="tab-btn active" onclick="showTab('setup')">
+      <span class="tab-icon" aria-hidden="true">⚙️</span>
+      <span class="tab-label">Setup</span>
+    </button>
+    <button class="tab-btn" onclick="showTab('catch')">
+      <span class="tab-icon" aria-hidden="true">🐟</span>
+      <span class="tab-label">Fang eintragen</span>
+    </button>
+    <button class="tab-btn" onclick="showTab('ranking')">
+      <span class="tab-icon" aria-hidden="true">🏆</span>
+      <span class="tab-label">Rangliste</span>
+    </button>
   </nav>
 
   <!-- SETUP PANEL -->
@@ -608,7 +1194,7 @@ select option { background: var(--surface); }
     </div>
     <div class="form-group" style="flex:0; justify-content:flex-end;">
       <label>&nbsp;</label>
-      <button class="btn btn-primary" onclick="addParticipant()">+ Hinzufügen</button>
+      <button class="btn btn-primary" onclick="addParticipant()"><span class="btn-icon" aria-hidden="true">＋</span> Hinzufügen</button>
     </div>
   </div>
   <div id="participants-list" class="participants-grid">
@@ -619,7 +1205,7 @@ select option { background: var(--surface); }
   </div>
 </div>
 
-<!-- Fischarten -->
+<!-- Fischsorten -->
 <div class="card">
   <div class="card-title">🐠 Fischarten</div>
   <div class="form-row">
@@ -629,13 +1215,13 @@ select option { background: var(--surface); }
     </div>
     <div class="form-group" style="flex:0; justify-content:flex-end;">
       <label>&nbsp;</label>
-      <button class="btn btn-primary" onclick="addSpecies()">+ Hinzufügen</button>
+      <button class="btn btn-primary" onclick="addSpecies()"><span class="btn-icon" aria-hidden="true">＋</span> Hinzufügen</button>
     </div>
   </div>
   <div id="species-list" class="species-grid">
     <div class="empty-state" style="width:100%; padding:20px;">
       <div class="empty-icon">🐟</div>
-      <p>Noch keine Fischarten</p>
+      <p>Noch keine Fischsorten</p>
     </div>
   </div>
 </div>
@@ -654,7 +1240,7 @@ select option { background: var(--surface); }
           <select id="sel-angler"><option value="">— Angler wählen —</option></select>
         </div>
         <div class="form-group">
-          <label>Fischarten</label>
+          <label>Fischsorte</label>
           <select id="sel-species"><option value="">— Fischart wählen —</option></select>
         </div>
         <div class="form-group" style="max-width:130px;">
@@ -663,7 +1249,7 @@ select option { background: var(--surface); }
         </div>
         <div class="form-group" style="flex:0; justify-content:flex-end;">
           <label>&nbsp;</label>
-          <button class="btn btn-gold" onclick="addCatch()">🐟 Eintragen</button>
+          <button class="btn btn-gold" onclick="addCatch()"><span class="btn-icon" aria-hidden="true">🐟</span> Eintragen</button>
         </div>
       </div>
     </div>
@@ -713,6 +1299,8 @@ select option { background: var(--surface); }
     catches: []        // {id, participantId, speciesId, length, ts}
   };
 
+  const STORAGE_KEY = 'angelturnier_state_v1';
+
   const COLORS = [
     '#2e8bc0','#d4a234','#2eb87a','#e05c5c','#9b72cf',
     '#e08030','#40bfb0','#d0609a','#8aaa30','#5090e0'
@@ -735,6 +1323,37 @@ select option { background: var(--surface); }
     setTimeout(() => t.classList.remove('show'), 2400);
   }
 
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (err) {
+      console.warn('Speichern fehlgeschlagen', err);
+    }
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const saved = JSON.parse(raw);
+      state.participants = Array.isArray(saved.participants) ? saved.participants : [];
+      state.species = Array.isArray(saved.species) ? saved.species : [];
+      state.catches = Array.isArray(saved.catches) ? saved.catches : [];
+      colorIdx = state.participants.length + state.species.length + state.catches.length;
+    } catch (err) {
+      console.warn('Laden fehlgeschlagen', err);
+    }
+  }
+
+  function renderAll() {
+    renderParticipants();
+    renderSpecies();
+    refreshSelects();
+    renderCatchLog();
+    renderRanking();
+  }
+
+
   // ─── Tabs ─────────────────────────────────────────────────────────────────
   function showTab(id) {
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -756,6 +1375,7 @@ select option { background: var(--surface); }
     state.participants.push({ id: uid(), name, color: nextColor() });
     inp.value = '';
     renderParticipants();
+    saveState();
     toast('✓ ' + name + ' hinzugefügt');
   }
 
@@ -763,6 +1383,10 @@ select option { background: var(--surface); }
     state.participants = state.participants.filter(p => p.id !== id);
     state.catches = state.catches.filter(c => c.participantId !== id);
     renderParticipants();
+    refreshSelects();
+    renderCatchLog();
+    renderRanking();
+    saveState();
   }
 
   function renderParticipants() {
@@ -791,6 +1415,7 @@ select option { background: var(--surface); }
     state.species.push({ id: uid(), name, color: COLORS[(state.species.length + 3) % COLORS.length] });
     inp.value = '';
     renderSpecies();
+    saveState();
     toast('✓ ' + name + ' hinzugefügt');
   }
 
@@ -798,12 +1423,16 @@ select option { background: var(--surface); }
     state.species = state.species.filter(s => s.id !== id);
     state.catches = state.catches.filter(c => c.speciesId !== id);
     renderSpecies();
+    refreshSelects();
+    renderCatchLog();
+    renderRanking();
+    saveState();
   }
 
   function renderSpecies() {
     const el = document.getElementById('species-list');
     if (!state.species.length) {
-      el.innerHTML = `<div class="empty-state" style="width:100%;padding:20px;"><div class="empty-icon">🐟</div><p>Noch keine Fischarten</p></div>`;
+      el.innerHTML = `<div class="empty-state" style="width:100%;padding:20px;"><div class="empty-icon">🐟</div><p>Noch keine Fischsorten</p></div>`;
       return;
     }
     el.innerHTML = state.species.map(s => `
@@ -842,12 +1471,15 @@ select option { background: var(--surface); }
     state.catches.push({ id: uid(), participantId: angId, speciesId: spId, length: len, ts: Date.now() });
     document.getElementById('inp-length').value = '';
     renderCatchLog();
+    saveState();
     toast('🐟 Fang eingetragen!');
   }
 
   function removeCatch(id) {
     state.catches = state.catches.filter(c => c.id !== id);
     renderCatchLog();
+    renderRanking();
+    saveState();
   }
 
   function renderCatchLog() {
@@ -881,11 +1513,9 @@ select option { background: var(--surface); }
 
   // ─── Ranking ──────────────────────────────────────────────────────────────
   function renderRanking() {
-    // Stats
     const sc = document.getElementById('stat-chips');
     const totalFish = state.catches.length;
     const maxLen = totalFish ? Math.max(...state.catches.map(c => c.length)) : 0;
-    const leaders = new Set(state.catches.map(c => c.participantId)).size;
     sc.innerHTML = `
       <div class="stat-chip"><div class="val">${state.participants.length}</div><div class="lbl">Angler</div></div>
       <div class="stat-chip"><div class="val">${totalFish}</div><div class="lbl">Fänge</div></div>
@@ -899,23 +1529,33 @@ select option { background: var(--surface); }
       return;
     }
 
-    // Build ranking per species
     let html = '';
+    const overallBest = {};
+
     state.species.forEach(sp => {
       const spCatches = state.catches.filter(c => c.speciesId === sp.id);
       if (!spCatches.length) return;
 
-      // Aggregate: sum of lengths per participant
-      const agg = {};
+      const bestPerParticipant = {};
       spCatches.forEach(c => {
-        if (!agg[c.participantId]) agg[c.participantId] = { total: 0, count: 0 };
-        agg[c.participantId].total += c.length;
-        agg[c.participantId].count++;
+        const existing = bestPerParticipant[c.participantId];
+        if (!existing || c.length > existing.length) {
+          bestPerParticipant[c.participantId] = c;
+        }
       });
 
-      const rows = Object.entries(agg)
-        .map(([pid, d]) => ({ pid, ...d }))
-        .sort((a, b) => b.total - a.total);
+      const rows = Object.values(bestPerParticipant)
+        .map(c => ({
+          pid: c.participantId,
+          best: c.length
+        }))
+        .sort((a, b) => b.best - a.best);
+
+      rows.forEach(r => {
+        if (!overallBest[r.pid]) overallBest[r.pid] = { total: 0, count: 0 };
+        overallBest[r.pid].total += r.best;
+        overallBest[r.pid].count += 1;
+      });
 
       const rankClasses = ['rank-1', 'rank-2', 'rank-3'];
 
@@ -926,7 +1566,7 @@ select option { background: var(--surface); }
               <div class="species-dot" style="background:${sp.color}"></div>
               ${sp.name}
             </div>
-            <span style="color:var(--muted);font-size:13px">${spCatches.length} Fang${spCatches.length !== 1 ? 'e' : ''}</span>
+            <span style="color:var(--muted);font-size:13px">${rows.length} gewertet</span>
           </div>
           <div class="card" style="padding:0;overflow:hidden;">
             <table class="ranking-table">
@@ -934,8 +1574,8 @@ select option { background: var(--surface); }
                 <tr>
                   <th style="width:56px">Platz</th>
                   <th>Angler</th>
-                  <th>Fänge</th>
-                  <th>Gesamtlänge</th>
+                  <th>Wertung</th>
+                  <th>Größter Fisch</th>
                 </tr>
               </thead>
               <tbody>
@@ -954,10 +1594,9 @@ select option { background: var(--surface); }
                           ${isFirst ? '<span style="font-size:16px;margin-left:4px">🏆</span>' : ''}
                         </div>
                       </td>
-                      <td style="color:var(--muted)">${r.count}×</td>
+                      <td style="color:var(--muted)">nur bester Fang</td>
                       <td>
-                        <div class="length-display" style="color:${isFirst ? 'var(--gold)' : 'var(--accent)'}">${r.total.toFixed(1)} cm</div>
-                        <div class="length-sub">Ø ${(r.total / r.count).toFixed(1)} cm</div>
+                        <div class="length-display" style="color:${isFirst ? 'var(--gold)' : 'var(--accent)'}">${r.best.toFixed(1)} cm</div>
                       </td>
                     </tr>
                   `;
@@ -969,16 +1608,9 @@ select option { background: var(--surface); }
       `;
     });
 
-    // Overall ranking (total across all species)
-    if (state.species.length > 1) {
-      const overall = {};
-      state.catches.forEach(c => {
-        if (!overall[c.participantId]) overall[c.participantId] = 0;
-        overall[c.participantId] += c.length;
-      });
-
-      const overallRows = Object.entries(overall)
-        .map(([pid, total]) => ({ pid, total }))
+    if (state.species.length > 1 && Object.keys(overallBest).length) {
+      const overallRows = Object.entries(overallBest)
+        .map(([pid, data]) => ({ pid, ...data }))
         .sort((a, b) => b.total - a.total);
 
       const rankClasses = ['rank-1', 'rank-2', 'rank-3'];
@@ -987,7 +1619,7 @@ select option { background: var(--surface); }
         <div class="ranking-section">
           <div class="ranking-header">
             <div class="species-badge">🏅 Gesamtwertung</div>
-            <span style="color:var(--muted);font-size:13px">Alle Fischarten</span>
+            <span style="color:var(--muted);font-size:13px">pro Fischart zählt nur der größte Fisch</span>
           </div>
           <div class="card" style="padding:0;overflow:hidden;">
             <table class="ranking-table">
@@ -995,6 +1627,7 @@ select option { background: var(--surface); }
                 <tr>
                   <th style="width:56px">Platz</th>
                   <th>Angler</th>
+                  <th>Gewertete Arten</th>
                   <th>Gesamtlänge</th>
                 </tr>
               </thead>
@@ -1013,6 +1646,7 @@ select option { background: var(--surface); }
                           ${i === 0 ? '<span style="font-size:16px;margin-left:4px">👑</span>' : ''}
                         </div>
                       </td>
+                      <td style="color:var(--muted)">${r.count}</td>
                       <td>
                         <div class="length-display" style="color:${i === 0 ? 'var(--gold)' : 'var(--accent)'}">${r.total.toFixed(1)} cm</div>
                       </td>
@@ -1028,6 +1662,9 @@ select option { background: var(--surface); }
 
     el.innerHTML = html || `<div class="empty-state" style="padding:40px;"><div class="empty-icon">🐟</div><p>Keine Fänge für verfügbare Fischarten</p></div>`;
   }
+
+  loadState();
+  renderAll();
 
   // ─── Enter key support ────────────────────────────────────────────────────
   document.getElementById('inp-name').addEventListener('keydown', e => { if (e.key === 'Enter') addParticipant(); });
