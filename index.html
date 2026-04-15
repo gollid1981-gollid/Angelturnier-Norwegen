@@ -619,7 +619,7 @@ select option { background: var(--surface); }
   </div>
 </div>
 
-<!-- Fischsorten -->
+<!-- Fischarten -->
 <div class="card">
   <div class="card-title">🐠 Fischarten</div>
   <div class="form-row">
@@ -635,7 +635,7 @@ select option { background: var(--surface); }
   <div id="species-list" class="species-grid">
     <div class="empty-state" style="width:100%; padding:20px;">
       <div class="empty-icon">🐟</div>
-      <p>Noch keine Fischsorten</p>
+      <p>Noch keine Fischarten</p>
     </div>
   </div>
 </div>
@@ -654,7 +654,7 @@ select option { background: var(--surface); }
           <select id="sel-angler"><option value="">— Angler wählen —</option></select>
         </div>
         <div class="form-group">
-          <label>Fischsorte</label>
+          <label>Fischarten</label>
           <select id="sel-species"><option value="">— Fischart wählen —</option></select>
         </div>
         <div class="form-group" style="max-width:130px;">
@@ -803,7 +803,7 @@ select option { background: var(--surface); }
   function renderSpecies() {
     const el = document.getElementById('species-list');
     if (!state.species.length) {
-      el.innerHTML = `<div class="empty-state" style="width:100%;padding:20px;"><div class="empty-icon">🐟</div><p>Noch keine Fischsorten</p></div>`;
+      el.innerHTML = `<div class="empty-state" style="width:100%;padding:20px;"><div class="empty-icon">🐟</div><p>Noch keine Fischarten</p></div>`;
       return;
     }
     el.innerHTML = state.species.map(s => `
