@@ -1153,6 +1153,129 @@ option {
   filter: drop-shadow(0 8px 18px rgba(58,160,243,0.18)) !important;
 }
 
+
+/* Header-Icon etwas weiter nach links, damit es nicht in den Titel ragt */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
+.logo {
+  margin: 0 0 0 -18px !important;
+  flex-shrink: 0;
+}
+
+header h1 {
+  margin-bottom: 0;
+}
+
+header .subtitle {
+  display: none;
+}
+
+@media (max-width: 680px) {
+  header {
+    gap: 14px;
+  }
+
+  .logo {
+    margin-left: -10px !important;
+  }
+}
+
+
+.header-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.header-text .subtitle {
+  display: block !important;
+  margin-top: 8px;
+  text-align: left;
+}
+
+
+/* Überschriften-Icons weiter nach links und sauber vom Text getrennt */
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-left: 0 !important;
+  position: relative;
+}
+
+.card-title::before,
+.card-title::after {
+  left: 0 !important;
+  display: none !important;
+}
+
+.title-icon {
+  width: 60px;
+  height: 60px;
+  margin-left: -10px;
+  margin-right: 2px;
+  border-radius: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 30px;
+  background: linear-gradient(180deg, #fffdfa 0%, #f4ede4 100%);
+  border: 1px solid #eadfce;
+  box-shadow: 0 12px 28px rgba(74,54,34,0.12);
+}
+
+.title-text {
+  display: inline-block;
+  line-height: 1.1;
+}
+
+@media (max-width: 680px) {
+  .card-title {
+    gap: 12px;
+  }
+
+  .title-icon {
+    width: 52px;
+    height: 52px;
+    margin-left: -6px;
+    font-size: 26px;
+    border-radius: 16px;
+  }
+}
+
+
+/* Fischart-Badge: Icon sauber links, kein Überlagern des Textes */
+.species-badge {
+  position: relative;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 10px;
+  padding-left: 18px !important;
+  min-height: 44px;
+}
+
+.species-badge::before,
+.species-badge::after {
+  display: none !important;
+}
+
+.species-badge .species-dot {
+  margin-left: 0 !important;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.92), 0 0 0 4px rgba(74,54,34,0.10) !important;
+}
+
+.ranking-header .species-badge {
+  padding-right: 18px !important;
+  white-space: nowrap;
+}
+
 </style>
 </head>
 <body>
@@ -1160,8 +1283,10 @@ option {
 
   <header>
     <span class="logo">🎣</span>
-    <h1>Angelturnier</h1>
-    <p class="subtitle">Fanglisten &amp; Rangliste</p>
+    <div class="header-text">
+      <h1>Angelturnier</h1>
+      <p class="subtitle">Fanglisten &amp; Rangliste</p>
+    </div>
   </header>
 
   <nav class="tabs">
@@ -1186,7 +1311,7 @@ option {
 ```
 <!-- Teilnehmer -->
 <div class="card">
-  <div class="card-title">👤 Teilnehmer</div>
+  <div class="card-title"><span class="title-icon" aria-hidden="true">👤</span><span class="title-text">Teilnehmer</span></div>
   <div class="form-row">
     <div class="form-group">
       <label>Name</label>
@@ -1205,9 +1330,9 @@ option {
   </div>
 </div>
 
-<!-- Fischartn -->
+<!-- Fischsorten -->
 <div class="card">
-  <div class="card-title">🐠 Fischarten</div>
+  <div class="card-title"><span class="title-icon" aria-hidden="true">🐠</span><span class="title-text">Fischarten</span></div>
   <div class="form-row">
     <div class="form-group">
       <label>Fischart</label>
@@ -1221,7 +1346,7 @@ option {
   <div id="species-list" class="species-grid">
     <div class="empty-state" style="width:100%; padding:20px;">
       <div class="empty-icon">🐟</div>
-      <p>Noch keine Fischartn</p>
+      <p>Noch keine Fischsorten</p>
     </div>
   </div>
 </div>
@@ -1233,14 +1358,14 @@ option {
 
   <div id="tab-catch" class="panel">
     <div class="card">
-      <div class="card-title">🎣 Fang eintragen</div>
+      <div class="card-title"><span class="title-icon" aria-hidden="true">🎣</span><span class="title-text">Fang eintragen</span></div>
       <div class="form-row">
         <div class="form-group">
           <label>Angler</label>
           <select id="sel-angler"><option value="">— Angler wählen —</option></select>
         </div>
         <div class="form-group">
-          <label>Fischart</label>
+          <label>Fischsorte</label>
           <select id="sel-species"><option value="">— Fischart wählen —</option></select>
         </div>
         <div class="form-group" style="max-width:130px;">
@@ -1256,7 +1381,7 @@ option {
 
 ```
 <div class="card">
-  <div class="card-title">📋 Fangliste
+  <div class="card-title"><span class="title-icon" aria-hidden="true">📋</span><span class="title-text">Fangliste</span>
     <span style="margin-left:auto; font-family:'Source Sans 3'; font-size:13px; color:var(--muted); font-weight:400;" id="catch-count"></span>
   </div>
   <div id="catch-log" class="catch-log">
