@@ -1330,7 +1330,7 @@ header .subtitle {
   </div>
 </div>
 
-<!-- Fischsorten -->
+<!-- Fischarten -->
 <div class="card">
   <div class="card-title"><span class="title-icon" aria-hidden="true">🐠</span><span class="title-text">Fischarten</span></div>
   <div class="form-row">
@@ -1346,7 +1346,7 @@ header .subtitle {
   <div id="species-list" class="species-grid">
     <div class="empty-state" style="width:100%; padding:20px;">
       <div class="empty-icon">🐟</div>
-      <p>Noch keine Fischsorten</p>
+      <p>Noch keine Fischarten</p>
     </div>
   </div>
 </div>
@@ -1365,7 +1365,7 @@ header .subtitle {
           <select id="sel-angler"><option value="">— Angler wählen —</option></select>
         </div>
         <div class="form-group">
-          <label>Fischsorte</label>
+          <label>Fischart</label>
           <select id="sel-species"><option value="">— Fischart wählen —</option></select>
         </div>
         <div class="form-group" style="max-width:130px;">
@@ -1557,7 +1557,7 @@ header .subtitle {
   function renderSpecies() {
     const el = document.getElementById('species-list');
     if (!state.species.length) {
-      el.innerHTML = `<div class="empty-state" style="width:100%;padding:20px;"><div class="empty-icon">🐟</div><p>Noch keine Fischsorten</p></div>`;
+      el.innerHTML = `<div class="empty-state" style="width:100%;padding:20px;"><div class="empty-icon">🐟</div><p>Noch keine Fischarten</p></div>`;
       return;
     }
     el.innerHTML = state.species.map(s => `
