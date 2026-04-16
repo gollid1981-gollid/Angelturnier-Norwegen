@@ -471,15 +471,17 @@ select option { background: #fffdfa; color: #2f241a; }
 }
 
 .participant-chip .avatar {
-  width: 24px;
-  height: 32px;
-  border-radius: 12px;
-  display: flex;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 12px;
+  font-size: 0;
+  line-height: 1;
   flex-shrink: 0;
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.92), 0 0 0 4px rgba(74,54,34,0.10) !important;
 }
 
 .participant-chip .name {
@@ -1277,55 +1279,61 @@ header .subtitle {
 }
 
 
+/* Teilnehmer-Chips wie Fischarten: kompakter Punkt links, Name bekommt mehr Platz */
 .participant-chip {
+  display: flex;
+  align-items: center;
   gap: 10px;
+  padding: 8px 12px;
+  border-radius: 24px;
 }
 
 .participant-chip .name {
+  flex: 1 1 auto;
   min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.participant-chip .btn-danger {
+  flex-shrink: 0;
+  padding: 6px 10px;
+  min-height: 34px;
+  width: auto !important;
+  border-radius: 12px;
 }
 
 @media (max-width: 520px) {
+  .participants-grid {
+    grid-template-columns: 1fr;
+  }
+
   .participant-chip {
-    padding: 10px 12px;
+    padding: 7px 10px;
+    gap: 8px;
   }
 
   .participant-chip .avatar {
-    width: 22px;
-    height: 30px;
-    border-radius: 10px;
-    font-size: 11px;
+    width: 9px;
+    height: 9px;
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.92), 0 0 0 4px rgba(74,54,34,0.10) !important;
   }
 
-  .btn-danger {
-    padding: 6px 10px;
+  .participant-chip .name {
+    font-size: 13px;
   }
-}
 
-
-.sync-note {
-  background: linear-gradient(135deg, #eef6ff 0%, #f8fbff 100%);
-  border: 1px solid #cfe1f6;
-  color: #24415f;
-  border-radius: 14px;
-  padding: 12px 14px;
-  margin-bottom: 18px;
-  font-size: 14px;
-  line-height: 1.45;
-}
-
-.sync-note strong {
-  color: #12365d;
+  .participant-chip .btn-danger {
+    padding: 5px 9px;
+    min-height: 32px;
+  }
 }
 
 </style>
 </head>
 <body>
 <div class="wrapper">
-  <div class="sync-note">
-    <strong>Live-Synchronisierung vorbereitet:</strong> Diese Version ist für eine zentrale Speicherung über Firebase Realtime Database vorbereitet. 
-    Trage unten im Script nur noch deine Firebase-Zugangsdaten ein, dann sind Eingaben auf allen Geräten sofort sichtbar.
-  </div>
 
   <header>
     <span class="logo">🎣</span>
@@ -1376,7 +1384,7 @@ header .subtitle {
   </div>
 </div>
 
-<!-- Fischsorten -->
+<!-- Fischarten -->
 <div class="card">
   <div class="card-title"><span class="title-icon" aria-hidden="true">🐠</span><span class="title-text">Fischarten</span></div>
   <div class="form-row">
@@ -1392,7 +1400,7 @@ header .subtitle {
   <div id="species-list" class="species-grid">
     <div class="empty-state" style="width:100%; padding:20px;">
       <div class="empty-icon">🐟</div>
-      <p>Noch keine Fischsorten</p>
+      <p>Noch keine Fischarten</p>
     </div>
   </div>
 </div>
@@ -1411,7 +1419,7 @@ header .subtitle {
           <select id="sel-angler"><option value="">— Angler wählen —</option></select>
         </div>
         <div class="form-group">
-          <label>Fischsorte</label>
+          <label>Fischart</label>
           <select id="sel-species"><option value="">— Fischart wählen —</option></select>
         </div>
         <div class="form-group" style="max-width:130px;">
@@ -1462,38 +1470,58 @@ header .subtitle {
 
 <div class="toast" id="toast"></div>
 
-<script type="module">
-  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-  import { getDatabase, ref, onValue, set } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+<script>
+  // ─── State ────────────────────────────────────────────────────────────────
+  const state = {
+    participants: [],  // {id, name, color}
+    species: [],       // {id, name, color}
+    catches: []        // {id, participantId, speciesId, length, ts}
+  };
 
-  function hasFirebaseConfig() {
-    return Object.values(FIREBASE_CONFIG).every(v => v && v !== 'BITTE_EINTRAGEN');
+  const STORAGE_KEY = 'angelturnier_state_v1';
+
+  const COLORS = [
+    '#2e8bc0','#d4a234','#2eb87a','#e05c5c','#9b72cf',
+    '#e08030','#40bfb0','#d0609a','#8aaa30','#5090e0'
+  ];
+
+  let colorIdx = 0;
+  function nextColor() { return COLORS[colorIdx++ % COLORS.length]; }
+
+  // ─── Helpers ──────────────────────────────────────────────────────────────
+  function uid() { return Math.random().toString(36).slice(2, 9); }
+
+  function initials(name) {
+    return name.trim().split(/\s+/).map(w => w[0]).join('').toUpperCase().slice(0, 2);
   }
 
-  function initFirebase() {
-    if (!hasFirebaseConfig()) {
-      console.warn('Firebase-Konfiguration fehlt.');
-      return;
+  function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2400);
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (err) {
+      console.warn('Speichern fehlgeschlagen', err);
     }
-    const app = initializeApp(FIREBASE_CONFIG);
-    db = getDatabase(app);
-    firebaseReady = true;
-
-    const stateRef = ref(db, DB_PATH);
-    onValue(stateRef, (snapshot) => {
-      const data = snapshot.val();
-      if (!data) return;
-      suppressRemoteWrite = true;
-      state.participants = Array.isArray(data.participants) ? data.participants : [];
-      state.species = Array.isArray(data.species) ? data.species : [];
-      state.catches = Array.isArray(data.catches) ? data.catches : [];
-      colorIdx = state.participants.length + state.species.length + state.catches.length;
-      renderAll();
-      suppressRemoteWrite = false;
-    });
   }
 
-  async
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const saved = JSON.parse(raw);
+      state.participants = Array.isArray(saved.participants) ? saved.participants : [];
+      state.species = Array.isArray(saved.species) ? saved.species : [];
+      state.catches = Array.isArray(saved.catches) ? saved.catches : [];
+      colorIdx = state.participants.length + state.species.length + state.catches.length;
+    } catch (err) {
+      console.warn('Laden fehlgeschlagen', err);
+    }
   }
 
   function renderAll() {
@@ -1583,7 +1611,7 @@ header .subtitle {
   function renderSpecies() {
     const el = document.getElementById('species-list');
     if (!state.species.length) {
-      el.innerHTML = `<div class="empty-state" style="width:100%;padding:20px;"><div class="empty-icon">🐟</div><p>Noch keine Fischsorten</p></div>`;
+      el.innerHTML = `<div class="empty-state" style="width:100%;padding:20px;"><div class="empty-icon">🐟</div><p>Noch keine Fischarten</p></div>`;
       return;
     }
     el.innerHTML = state.species.map(s => `
@@ -1814,7 +1842,7 @@ header .subtitle {
     el.innerHTML = html || `<div class="empty-state" style="padding:40px;"><div class="empty-icon">🐟</div><p>Keine Fänge für verfügbare Fischarten</p></div>`;
   }
 
-  initFirebase();
+  loadState();
   renderAll();
 
   // ─── Enter key support ────────────────────────────────────────────────────
