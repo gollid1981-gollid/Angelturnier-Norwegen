@@ -471,14 +471,14 @@ select option { background: #fffdfa; color: #2f241a; }
 }
 
 .participant-chip .avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+  width: 24px;
+  height: 32px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 12px;
   flex-shrink: 0;
 }
 
@@ -1276,10 +1276,56 @@ header .subtitle {
   white-space: nowrap;
 }
 
+
+.participant-chip {
+  gap: 10px;
+}
+
+.participant-chip .name {
+  min-width: 0;
+}
+
+@media (max-width: 520px) {
+  .participant-chip {
+    padding: 10px 12px;
+  }
+
+  .participant-chip .avatar {
+    width: 22px;
+    height: 30px;
+    border-radius: 10px;
+    font-size: 11px;
+  }
+
+  .btn-danger {
+    padding: 6px 10px;
+  }
+}
+
+
+.sync-note {
+  background: linear-gradient(135deg, #eef6ff 0%, #f8fbff 100%);
+  border: 1px solid #cfe1f6;
+  color: #24415f;
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.sync-note strong {
+  color: #12365d;
+}
+
 </style>
 </head>
 <body>
 <div class="wrapper">
+  <div class="sync-note">
+    <strong>Live-Synchronisierung vorbereitet:</strong> Diese Version ist für eine zentrale Speicherung über Firebase Realtime Database vorbereitet. 
+    Trage unten im Script nur noch deine Firebase-Zugangsdaten ein, dann sind Eingaben auf allen Geräten sofort sichtbar.
+  </div>
 
   <header>
     <span class="logo">🎣</span>
@@ -1290,11 +1336,11 @@ header .subtitle {
   </header>
 
   <nav class="tabs">
-    <button class="tab-btn active" onclick="showTab('setup')">
+    <button class="tab-btn" onclick="showTab('setup')">
       <span class="tab-icon" aria-hidden="true">⚙️</span>
       <span class="tab-label">Setup</span>
     </button>
-    <button class="tab-btn" onclick="showTab('catch')">
+    <button class="tab-btn active" onclick="showTab('catch')">
       <span class="tab-icon" aria-hidden="true">🐟</span>
       <span class="tab-label">Fang eintragen</span>
     </button>
@@ -1306,7 +1352,7 @@ header .subtitle {
 
   <!-- SETUP PANEL -->
 
-  <div id="tab-setup" class="panel active">
+  <div id="tab-setup" class="panel">
 
 ```
 <!-- Teilnehmer -->
@@ -1330,7 +1376,7 @@ header .subtitle {
   </div>
 </div>
 
-<!-- Fischarten -->
+<!-- Fischsorten -->
 <div class="card">
   <div class="card-title"><span class="title-icon" aria-hidden="true">🐠</span><span class="title-text">Fischarten</span></div>
   <div class="form-row">
@@ -1346,7 +1392,7 @@ header .subtitle {
   <div id="species-list" class="species-grid">
     <div class="empty-state" style="width:100%; padding:20px;">
       <div class="empty-icon">🐟</div>
-      <p>Noch keine Fischarten</p>
+      <p>Noch keine Fischsorten</p>
     </div>
   </div>
 </div>
@@ -1356,7 +1402,7 @@ header .subtitle {
 
   <!-- CATCH PANEL -->
 
-  <div id="tab-catch" class="panel">
+  <div id="tab-catch" class="panel active">
     <div class="card">
       <div class="card-title"><span class="title-icon" aria-hidden="true">🎣</span><span class="title-text">Fang eintragen</span></div>
       <div class="form-row">
@@ -1365,7 +1411,7 @@ header .subtitle {
           <select id="sel-angler"><option value="">— Angler wählen —</option></select>
         </div>
         <div class="form-group">
-          <label>Fischart</label>
+          <label>Fischsorte</label>
           <select id="sel-species"><option value="">— Fischart wählen —</option></select>
         </div>
         <div class="form-group" style="max-width:130px;">
@@ -1416,58 +1462,38 @@ header .subtitle {
 
 <div class="toast" id="toast"></div>
 
-<script>
-  // ─── State ────────────────────────────────────────────────────────────────
-  const state = {
-    participants: [],  // {id, name, color}
-    species: [],       // {id, name, color}
-    catches: []        // {id, participantId, speciesId, length, ts}
-  };
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+  import { getDatabase, ref, onValue, set } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
 
-  const STORAGE_KEY = 'angelturnier_state_v1';
-
-  const COLORS = [
-    '#2e8bc0','#d4a234','#2eb87a','#e05c5c','#9b72cf',
-    '#e08030','#40bfb0','#d0609a','#8aaa30','#5090e0'
-  ];
-
-  let colorIdx = 0;
-  function nextColor() { return COLORS[colorIdx++ % COLORS.length]; }
-
-  // ─── Helpers ──────────────────────────────────────────────────────────────
-  function uid() { return Math.random().toString(36).slice(2, 9); }
-
-  function initials(name) {
-    return name.trim().split(/\s+/).map(w => w[0]).join('').toUpperCase().slice(0, 2);
+  function hasFirebaseConfig() {
+    return Object.values(FIREBASE_CONFIG).every(v => v && v !== 'BITTE_EINTRAGEN');
   }
 
-  function toast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2400);
-  }
-
-  function saveState() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch (err) {
-      console.warn('Speichern fehlgeschlagen', err);
+  function initFirebase() {
+    if (!hasFirebaseConfig()) {
+      console.warn('Firebase-Konfiguration fehlt.');
+      return;
     }
-  }
+    const app = initializeApp(FIREBASE_CONFIG);
+    db = getDatabase(app);
+    firebaseReady = true;
 
-  function loadState() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return;
-      const saved = JSON.parse(raw);
-      state.participants = Array.isArray(saved.participants) ? saved.participants : [];
-      state.species = Array.isArray(saved.species) ? saved.species : [];
-      state.catches = Array.isArray(saved.catches) ? saved.catches : [];
+    const stateRef = ref(db, DB_PATH);
+    onValue(stateRef, (snapshot) => {
+      const data = snapshot.val();
+      if (!data) return;
+      suppressRemoteWrite = true;
+      state.participants = Array.isArray(data.participants) ? data.participants : [];
+      state.species = Array.isArray(data.species) ? data.species : [];
+      state.catches = Array.isArray(data.catches) ? data.catches : [];
       colorIdx = state.participants.length + state.species.length + state.catches.length;
-    } catch (err) {
-      console.warn('Laden fehlgeschlagen', err);
-    }
+      renderAll();
+      suppressRemoteWrite = false;
+    });
+  }
+
+  async
   }
 
   function renderAll() {
@@ -1557,7 +1583,7 @@ header .subtitle {
   function renderSpecies() {
     const el = document.getElementById('species-list');
     if (!state.species.length) {
-      el.innerHTML = `<div class="empty-state" style="width:100%;padding:20px;"><div class="empty-icon">🐟</div><p>Noch keine Fischarten</p></div>`;
+      el.innerHTML = `<div class="empty-state" style="width:100%;padding:20px;"><div class="empty-icon">🐟</div><p>Noch keine Fischsorten</p></div>`;
       return;
     }
     el.innerHTML = state.species.map(s => `
@@ -1788,7 +1814,7 @@ header .subtitle {
     el.innerHTML = html || `<div class="empty-state" style="padding:40px;"><div class="empty-icon">🐟</div><p>Keine Fänge für verfügbare Fischarten</p></div>`;
   }
 
-  loadState();
+  initFirebase();
   renderAll();
 
   // ─── Enter key support ────────────────────────────────────────────────────
