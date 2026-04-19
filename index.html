@@ -1883,6 +1883,16 @@ header .subtitle {
     el.innerHTML = html || `<div class="empty-state" style="padding:40px;"><div class="empty-icon">🐟</div><p>Keine Fänge für verfügbare Fischarten</p></div>`;
   }
 
+
+  // Inline-Handler für type="module" global verfügbar machen
+  window.showTab = showTab;
+  window.addParticipant = addParticipant;
+  window.removeParticipant = removeParticipant;
+  window.addSpecies = addSpecies;
+  window.removeSpecies = removeSpecies;
+  window.addCatch = addCatch;
+  window.removeCatch = removeCatch;
+
   initFirebase();
 
   // ─── Enter key support ────────────────────────────────────────────────────
