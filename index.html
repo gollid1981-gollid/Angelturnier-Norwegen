@@ -1330,10 +1330,25 @@ header .subtitle {
   }
 }
 
+
+.sync-note {
+  background: linear-gradient(135deg, #eef6ff 0%, #f8fbff 100%);
+  border: 1px solid #cfe1f6;
+  color: #24415f;
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
 </style>
 </head>
 <body>
 <div class="wrapper">
+  <div class="sync-note">
+    Live-Sync ist aktiv. Alle Eingaben werden zentral in Firebase gespeichert und auf allen verbundenen Geräten geteilt.
+  </div>
 
   <header>
     <span class="logo">🎣</span>
@@ -1470,7 +1485,9 @@ header .subtitle {
 
 <div class="toast" id="toast"></div>
 
-<script>
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+  import { getDatabase, ref, onValue, set } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
   // ─── State ────────────────────────────────────────────────────────────────
   const state = {
     participants: [],  // {id, name, color}
@@ -1478,7 +1495,20 @@ header .subtitle {
     catches: []        // {id, participantId, speciesId, length, ts}
   };
 
-  const STORAGE_KEY = 'angelturnier_state_v1';
+  const FIREBASE_CONFIG = {
+    apiKey: "AIzaSyChbUZnd6KgLkXsUV2EF06F9uOP3PZVfWQ",
+    authDomain: "angelturnier-norwegen.firebaseapp.com",
+    databaseURL: "https://angelturnier-norwegen-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "angelturnier-norwegen",
+    storageBucket: "angelturnier-norwegen.firebasestorage.app",
+    messagingSenderId: "708044368302",
+    appId: "1:708044368302:web:197bc8fbdfffa2e1f26c03f"
+  };
+
+  const DB_PATH = "angelturnier/shared";
+  let db = null;
+  let firebaseReady = false;
+  let suppressRemoteWrite = false;
 
   const COLORS = [
     '#2e8bc0','#d4a234','#2eb87a','#e05c5c','#9b72cf',
@@ -1502,25 +1532,36 @@ header .subtitle {
     setTimeout(() => t.classList.remove('show'), 2400);
   }
 
-  function saveState() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch (err) {
-      console.warn('Speichern fehlgeschlagen', err);
-    }
+  function initFirebase() {
+    const app = initializeApp(FIREBASE_CONFIG);
+    db = getDatabase(app);
+    firebaseReady = true;
+
+    const stateRef = ref(db, DB_PATH);
+    onValue(stateRef, (snapshot) => {
+      const data = snapshot.val();
+
+      suppressRemoteWrite = true;
+      state.participants = Array.isArray(data?.participants) ? data.participants : [];
+      state.species = Array.isArray(data?.species) ? data.species : [];
+      state.catches = Array.isArray(data?.catches) ? data.catches : [];
+      colorIdx = state.participants.length + state.species.length + state.catches.length;
+      renderAll();
+      suppressRemoteWrite = false;
+    });
   }
 
-  function loadState() {
+  async function saveState() {
+    if (!firebaseReady || !db || suppressRemoteWrite) return;
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return;
-      const saved = JSON.parse(raw);
-      state.participants = Array.isArray(saved.participants) ? saved.participants : [];
-      state.species = Array.isArray(saved.species) ? saved.species : [];
-      state.catches = Array.isArray(saved.catches) ? saved.catches : [];
-      colorIdx = state.participants.length + state.species.length + state.catches.length;
+      await set(ref(db, DB_PATH), {
+        participants: state.participants,
+        species: state.species,
+        catches: state.catches
+      });
     } catch (err) {
-      console.warn('Laden fehlgeschlagen', err);
+      console.warn('Zentrales Speichern fehlgeschlagen', err);
+      toast('Speichern fehlgeschlagen');
     }
   }
 
@@ -1842,8 +1883,7 @@ header .subtitle {
     el.innerHTML = html || `<div class="empty-state" style="padding:40px;"><div class="empty-icon">🐟</div><p>Keine Fänge für verfügbare Fischarten</p></div>`;
   }
 
-  loadState();
-  renderAll();
+  initFirebase();
 
   // ─── Enter key support ────────────────────────────────────────────────────
   document.getElementById('inp-name').addEventListener('keydown', e => { if (e.key === 'Enter') addParticipant(); });
