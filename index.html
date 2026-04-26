@@ -1696,10 +1696,14 @@ header .subtitle {
   }
 
   function removeCatch(id) {
+    const confirmed = window.confirm('Soll dieser Fang wirklich gelöscht werden?');
+    if (!confirmed) return;
+
     state.catches = state.catches.filter(c => c.id !== id);
     renderCatchLog();
     renderRanking();
     saveState();
+    toast('Fang gelöscht');
   }
 
   function renderCatchLog() {
