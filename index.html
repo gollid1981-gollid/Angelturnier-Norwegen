@@ -1342,95 +1342,6 @@ header .subtitle {
   line-height: 1.45;
 }
 
-
-/* Mobile-Fix: schmaleres Löschsymbol, mehr Platz für cm-Anzeige */
-.catch-item .ci-length {
-  flex-shrink: 0;
-  min-width: 72px;
-  text-align: right;
-}
-
-.catch-item .btn-danger {
-  flex-shrink: 0;
-  width: auto !important;
-  min-width: 34px;
-  min-height: 34px;
-  padding: 6px 8px;
-  border-radius: 10px;
-  line-height: 1;
-}
-
-@media (max-width: 680px) {
-  .catch-item {
-    gap: 10px;
-    padding: 10px 12px;
-  }
-
-  .catch-item .ci-info {
-    min-width: 0;
-  }
-
-  .catch-item .ci-main {
-    font-size: 13px;
-  }
-
-  .catch-item .ci-sub {
-    font-size: 11px;
-  }
-
-  .catch-item .ci-length {
-    min-width: 64px;
-    font-size: 16px;
-  }
-
-  .catch-item .btn-danger {
-    min-width: 30px;
-    min-height: 30px;
-    padding: 4px 7px;
-    font-size: 11px;
-  }
-}
-
-@media (max-width: 520px) {
-  .catch-item {
-    gap: 8px;
-    padding: 9px 10px;
-  }
-
-  .catch-item .ci-avatar {
-    width: 24px;
-    height: 24px;
-    font-size: 10px;
-  }
-
-  .catch-item .ci-info {
-    min-width: 0;
-  }
-
-  .catch-item .ci-main {
-    font-size: 12px;
-    line-height: 1.2;
-  }
-
-  .catch-item .ci-sub {
-    font-size: 10px;
-    line-height: 1.2;
-  }
-
-  .catch-item .ci-length {
-    min-width: 58px;
-    font-size: 15px;
-  }
-
-  .catch-item .btn-danger {
-    min-width: 26px;
-    min-height: 26px;
-    padding: 3px 6px;
-    font-size: 10px;
-    border-radius: 8px;
-  }
-}
-
 </style>
 </head>
 <body>
@@ -1612,6 +1523,15 @@ header .subtitle {
 
   function initials(name) {
     return name.trim().split(/\s+/).map(w => w[0]).join('').toUpperCase().slice(0, 2);
+  }
+
+  function formatCatchDate(ts) {
+    if (!ts) return '';
+    return new Date(ts).toLocaleDateString('de-DE', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
   }
 
   function toast(msg) {
@@ -1815,7 +1735,7 @@ header .subtitle {
           <div class="ci-avatar" style="background:${p.color}22;color:${p.color};border:1.5px solid ${p.color}44">${initials(p.name)}</div>
           <div class="ci-info">
             <div class="ci-main">${p.name}</div>
-            <div class="ci-sub"><span style="color:${s.color}">●</span> ${s.name}</div>
+            <div class="ci-sub"><span style="color:${s.color}">●</span> ${s.name} · ${formatCatchDate(c.ts)}</div>
           </div>
           <div class="ci-length">${c.length} cm</div>
           <button class="btn btn-danger" onclick="removeCatch('${c.id}')">✕</button>
