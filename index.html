@@ -1435,6 +1435,84 @@ header .subtitle {
   }
 }
 
+
+/* Noch kompaktere Hochformat-Anzeige für die Fangliste */
+@media (max-width: 520px) {
+  .catch-item {
+    display: grid !important;
+    grid-template-columns: 22px minmax(0, 1fr) 44px;
+    grid-template-areas:
+      "avatar info meta"
+      "avatar info meta";
+    align-items: start;
+    column-gap: 8px;
+    row-gap: 2px;
+    padding: 8px 10px;
+  }
+
+  .catch-item .ci-avatar {
+    grid-area: avatar;
+    width: 20px;
+    height: 20px;
+    font-size: 8px;
+    margin-top: 2px;
+    align-self: start;
+  }
+
+  .catch-item .ci-info {
+    grid-area: info;
+    min-width: 0;
+  }
+
+  .catch-item .ci-main {
+    font-size: 12px;
+    line-height: 1.15;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .catch-item .ci-sub {
+    font-size: 10px;
+    line-height: 1.15;
+    margin-top: 2px;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .catch-item .ci-length {
+    grid-area: meta;
+    min-width: 44px !important;
+    width: 44px;
+    font-size: 13px;
+    line-height: 1.05;
+    text-align: right;
+    white-space: nowrap;
+    align-self: start;
+    margin-top: 1px;
+  }
+
+  .catch-item .btn-danger {
+    grid-area: meta;
+    justify-self: end;
+    align-self: end;
+    width: 20px !important;
+    min-width: 20px !important;
+    max-width: 20px !important;
+    height: 20px !important;
+    min-height: 20px !important;
+    max-height: 20px !important;
+    padding: 0 !important;
+    border-radius: 6px;
+    font-size: 10px !important;
+    line-height: 20px !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+}
+
 </style>
 </head>
 <body>
