@@ -1342,6 +1342,99 @@ header .subtitle {
   line-height: 1.45;
 }
 
+
+/* Portrait-Fix für Fangliste auf schmalen Smartphones */
+.catch-item {
+  align-items: center;
+}
+
+.catch-item .ci-info {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.catch-item .ci-length {
+  flex: 0 0 auto;
+  min-width: 72px;
+  text-align: right;
+}
+
+.catch-item .btn-danger {
+  flex: 0 0 auto;
+  width: auto !important;
+  min-width: 32px;
+  min-height: 32px;
+  padding: 4px 7px;
+  line-height: 1;
+  border-radius: 8px;
+}
+
+@media (max-width: 520px) {
+  .catch-item {
+    display: grid;
+    grid-template-columns: 24px minmax(0, 1fr) auto auto;
+    align-items: center;
+    column-gap: 8px;
+    row-gap: 2px;
+    padding: 9px 10px;
+  }
+
+  .catch-item .ci-avatar {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    width: 22px;
+    height: 22px;
+    font-size: 9px;
+    align-self: start;
+    margin-top: 2px;
+  }
+
+  .catch-item .ci-info {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    min-width: 0;
+  }
+
+  .catch-item .ci-main {
+    font-size: 12px;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .catch-item .ci-sub {
+    font-size: 10px;
+    line-height: 1.2;
+    display: block;
+    white-space: normal;
+    word-break: break-word;
+    margin-top: 2px;
+  }
+
+  .catch-item .ci-length {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    align-self: center;
+    min-width: 54px;
+    font-size: 14px;
+    line-height: 1.1;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .catch-item .btn-danger {
+    grid-column: 4;
+    grid-row: 1 / span 2;
+    align-self: center;
+    min-width: 24px;
+    min-height: 24px;
+    padding: 2px 5px;
+    font-size: 10px;
+    border-radius: 7px;
+  }
+}
+
 </style>
 </head>
 <body>
